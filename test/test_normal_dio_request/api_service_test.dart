@@ -7,17 +7,17 @@ import 'api_service_test.mocks.dart';
 
 @GenerateMocks([Dio])
 void main(){
-  late MockDio dio;
+  late MockDio mockDio;
   late ApiService apiService;
 
   setUp((){
-    dio = MockDio();
-    apiService = ApiService(dio);
+    mockDio = MockDio();
+    apiService = ApiService(mockDio);
   });
 
   group('fetch Users', (){
     test('returns a list of users', () async {
-      when(dio.get('https://jsonplaceholder.typicode.com/users')).thenAnswer((_)async{
+      when(mockDio.get('https://jsonplaceholder.typicode.com/users')).thenAnswer((_)async{
         return Response(
           data: [
             {
@@ -42,6 +42,31 @@ void main(){
       expect(users[1].email, 'Sincere@april.biz');
       print(users[0].name);
     });
-  });
 
+    test('throws an exception if the API call fails', () async {
+      when(mockDio.get('https://jsonplaceholder.typicode.com/users')).thenThrow((_)async{
+        return DioException(
+            error: 'Failed to fetch users',
+            requestOptions: RequestOptions(
+                path: 'https://jsonplaceholder.typicode.com/users'
+            )
+        );
+      });
+      expect(apiService.fetchUsers(), throwsA(isInstanceOf<Exception>()));
+    });
+
+
+    test('throws an exception if the Status code is not 200', () async {
+      when(mockDio.get('https://jsonplaceholder.typicode.com/users')).thenThrow((_)async{
+        return Response(
+            statusCode: 404,
+            data: 'Not Found',
+            requestOptions: RequestOptions(
+                path: 'https://jsonplaceholder.typicode.com/users'
+            )
+        );
+      });
+      expect(apiService.fetchUsers(), throwsA(isInstanceOf<Exception>()));
+    });
+  });
 }
