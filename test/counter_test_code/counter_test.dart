@@ -19,6 +19,12 @@ void main(){
     });
 
     test('decrement should decrement count by one',(){
+      counter.increment();
+      counter.decrement();
+      expect(counter.count,0);
+    });
+
+    test('value will be negative',(){
       counter.decrement();
       expect(counter.count,-1);
     });
