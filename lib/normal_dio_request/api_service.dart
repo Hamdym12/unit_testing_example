@@ -1,22 +1,21 @@
 import 'package:dio/dio.dart';
 
+import 'model/user_model.dart';
+
 class ApiService{
   final Dio dio;
   ApiService(this.dio);
 
-  Future<void> fetchUsers() async{
+  Future<List<User>> fetchUsers() async{
     try{
       final response = await dio.get('https://jsonplaceholder.typicode.com/users');
       if(response.statusCode == 200){
-        print('Success');
+        return (response.data as List).map((user) => User.fromJson(user)).toList();
       }else{
-        print('Error');
         throw Exception('Failed to fetch users');
       }
-      print(response.data);
     }catch(e){
-      print('Error: $e');
       throw Exception('Error: $e');
     }
-    }
+  }
 }
