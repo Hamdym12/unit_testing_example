@@ -14,7 +14,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const SizedBox()
+      home: const Scaffold(
+        body: Center(
+          child: Text('Unit Testing'),
+        ),
+      )
     );
   }
 }
