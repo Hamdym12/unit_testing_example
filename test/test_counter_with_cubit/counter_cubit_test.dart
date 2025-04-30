@@ -32,6 +32,24 @@ void main(){
       expect: ()=>[1],
     );
 
+    blocTest<CounterCubit, int>(
+      'decrement then increment so emits -1 and 0',
+      build: () =>counterCubit,
+      act: (cubit) {
+        cubit.decrement();
+        cubit.increment();
+      },
+      expect: ()=>[-1,0],
+    );
 
+    blocTest<CounterCubit, int>(
+      'increment then decrement so emits 1 and 0',
+      build: () =>counterCubit,
+      act: (cubit) {
+        cubit.increment();
+        cubit.decrement();
+      },
+      expect: ()=>[1,0],
+    );
   });
 }
